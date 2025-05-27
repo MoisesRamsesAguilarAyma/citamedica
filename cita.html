@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agendar Cita - Clínica del Dr. Chapatín</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+  <div class="container mt-5">
+    <h2 class="text-center mb-4">🐾 Agendar Cita Médica</h2>
+
+    <form id="citaForm" class="card p-4 shadow mx-auto" style="max-width: 600px;">
+      <div class="mb-3">
+        <label for="duenio" class="form-label">Nombre del dueño</label>
+        <input type="text" class="form-control" id="duenio" required>
+      </div>
+      <div class="mb-3">
+        <label for="mascota" class="form-label">Nombre de la mascota</label>
+        <input type="text" class="form-control" id="mascota" required>
+      </div>
+      <div class="mb-3">
+        <label for="fecha" class="form-label">Fecha de la cita</label>
+        <input type="date" class="form-control" id="fecha" required>
+      </div>
+      <div class="mb-3">
+        <label for="hora" class="form-label">Hora de la cita</label>
+        <input type="time" class="form-control" id="hora" required>
+      </div>
+      <div class="mb-3">
+        <label for="sintomas" class="form-label">Síntomas observados</label>
+        <textarea class="form-control" id="sintomas" rows="3" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary w-100">Confirmar Cita</button>
+    </form>
+
+    <div id="mensajeCita" class="alert alert-success mt-4 d-none text-center"></div>
+  </div>
+
+  <script>
+    document.getElementById("citaForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      const duenio = document.getElementById("duenio").value.trim();
+      const mascota = document.getElementById("mascota").value.trim();
+      const fecha = document.getElementById("fecha").value;
+      const hora = document.getElementById("hora").value;
+      const sintomas = document.getElementById("sintomas").value.trim();
+
+      if (!duenio || !mascota || !fecha || !hora || !sintomas) {
+        alert("Por favor, completa todos los campos.");
+        return;
+      }
+
+      const ficha = Math.floor(1000 + Math.random() * 9000);
+      const mensaje = `✅ Cita confirmada. Su número de ficha es: ${ficha}, el día ${fecha} a las ${hora}.`;
+
+      // Mostrar mensaje en pantalla
+      const mensajeCita = document.getElementById("mensajeCita");
+      mensajeCita.textContent = mensaje;
+      mensajeCita.classList.remove("d-none");
+
+      // Guardar cita en localStorage
+      const citas = JSON.parse(localStorage.getItem("citas")) || [];
+      citas.push({ duenio, mascota, fecha, hora, sintomas, ficha });
+      localStorage.setItem("citas", JSON.stringify(citas));
+
+      // Simular envío de correo (en consola)
+      console.log(`Simulando envío de correo: ${mensaje}`);
+
+      // Limpiar formulario
+      document.getElementById("citaForm").reset();
+
+      // Imprimir hoja de cita (abre el diálogo de impresión)
+      window.print();
+    });
+  </script>
+</body>
+</html>
